@@ -7,7 +7,7 @@ export const getAurinkoAuthUrl = async (
 ) => {
   const { userId } = await auth();
   if (!userId) {
-    throw new Error("User not authenticated");
+    throw new Error("User not authorized");
   }
   const params = new URLSearchParams({
     clientId: process.env.AURINKO_CLIENT_ID as string,

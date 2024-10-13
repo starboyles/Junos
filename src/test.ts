@@ -4,7 +4,7 @@ await db.user.create({
     data: {
     emailAddress: 'testing@gmail.com',
     firstName: 'Leslie',
-    lastName: 'Gyamfi'  ,
+    lastName: 'Gyamfi',
     imageUrl: ''  
 }
 });

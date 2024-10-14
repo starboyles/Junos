@@ -1,3 +1,5 @@
+import LinkAccountButton from "@/components/ui/link-account-button";
+
 export default async function Home() {
-  return <h1>Home</h1>;
+  return <LinkAccountButton />;
 }

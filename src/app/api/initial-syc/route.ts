@@ -21,6 +21,22 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Account not found" }, { status: 404 });
 
    const account = new Account(dbAccount.accessToken) 
-   const emails = await performInitialSync()
+
+   const response = await account.performInitialSync()
+   if (!response) {
+      return NextResponse.json({ error: "Failed to perform initial sync" }, { status: 500 });
+   }
+   const { emails, deltaToken} = response
+
+   await db.account.update({
+    where: {
+      id: accountId
+    },
+    data: {
+      nextDeltaToken: deltaToken
+    }
+
+   })
+
    await syncEmailsToDatabase(emails)
 };

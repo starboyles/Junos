@@ -1,4 +1,4 @@
-import { SyncResponse, SyncUpdatedResponse } from "@/types";
+import { EmailMessage, SyncResponse, SyncUpdatedResponse } from "@/types";
 import axios, { AxiosError } from "axios";
 export class Account {
   private token: String;
@@ -57,6 +57,33 @@ export class Account {
       let storedDeltaToken: string = syncResponse.syncUpdatedToken;
 
       let updatedResponse = await this.getUpdatedEmails({deltaToken: storedDeltaToken});
-    } catch (error) {}
+
+      if (updatedResponse.nextDeltaToken) {
+        storedDeltaToken = updatedResponse.nextDeltaToken;
+      }
+      let allEmails : EmailMessage [] = updatedResponse.records
+
+      while(updatedResponse.nextPageToken) {
+        updatedResponse = await this.getUpdatedEmails({pageToken: updatedResponse.nextPageToken})
+        allEmails = allEmails.concat(updatedResponse.records)
+        if (updatedResponse.nextDeltaToken) {
+          storedDeltaToken = updatedResponse.nextDeltaToken;
+        }
+    }
+    console.log('synced', allEmails.length, 'emails')
+    return {
+      emails: allEmails,
+      deltaToken: storedDeltaToken,
+      
+    }
+
+    } catch (error) {
+      if (axios.isAxiosError(error)){
+        console.error('Sync Error:', JSON.stringify(error.response?.data, null, 2) )
+      }
+      else {
+        console.error('Sync Error:', error)
+      }
+    }
   }
 }

@@ -1,3 +1,3 @@
 # Welcome to Junos!
 
-Junos is your smart, intuitive email management sytem
+Junos is your smart, intuitive, email management sytem

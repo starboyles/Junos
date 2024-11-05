@@ -1,5 +1,7 @@
 import { EmailMessage, SyncResponse, SyncUpdatedResponse } from "@/types";
 import axios, { AxiosError } from "axios";
+
+
 export class Account {
   private token: String;
 
